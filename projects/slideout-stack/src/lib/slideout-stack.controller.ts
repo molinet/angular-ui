@@ -31,6 +31,10 @@ export class SlideOutStackController {
    */
   private _domPortalOutlet?: DomPortalOutlet;
   /**
+   * A flag to prevent multiple pops at the same time.
+   */
+  private _popping = false;
+  /**
    * The stack of slideouts with their options.
    */
   private _slideOutStack: {
@@ -102,7 +106,8 @@ export class SlideOutStackController {
    * in the {@link push `push`} method.
    */
   public pop(): void {
-    if (!this._domPortalOutlet) this._createDomPortalOutlet();
+    if (this._popping) return;
+    this._popping = true;
 
     this._dismissTopBackdrop();
     this._dismissTopSlideOut();
@@ -236,6 +241,8 @@ export class SlideOutStackController {
         this._domPortalOutlet?.dispose();
         this._domPortalOutlet = undefined;
       }
+
+      this._popping = false;
     }, options.animationDuration);
 
     slideOutElems[slideOutElems.length - 2]?.classList.remove("expanded");
