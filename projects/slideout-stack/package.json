@@ -1,0 +1,27 @@
+{
+  "name": "@molinet/slideout-stack",
+  "version": "0.0.1",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "peerDependencies": {
+    "@angular/common": "17.3.2",
+    "@angular/core": "17.3.2"
+  },
+  "dependencies": {
+    "tslib": "2.6.2"
+  },
+  "sideEffects": false,
+  "description": "A service that controls a stack of slideout elements.",
+  "author": "molinet",
+  "main": "index.d.ts",
+  "homepage": "https://github.com/molinet/angular-ui#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/molinet/angular-ui.git"
+  },
+  "bugs": {
+    "url": "https://github.com/molinet/angular-ui/issues"
+  },
+  "license": "MIT"
+}
