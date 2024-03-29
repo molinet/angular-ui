@@ -67,7 +67,7 @@ Returns a [`SlideOutElement`](#slideoutelement) representing the pushed slideout
 
 #### `pop(): void`
 
-Pops the top [`SlideOutElement`](#slideoutelement) from the stack. It will be dismissed with the `options` passed in the `push` method.
+Pops the top [`SlideOutElement`](#slideoutelement) from the stack if exists. It will be dismissed with the `options` passed in the `push` method.
 
 ### Interfaces
 

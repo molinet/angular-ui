@@ -100,12 +100,17 @@ export class SlideOutStackController {
   }
 
   /**
-   * Pops the top {@link SlideOutElement `SlideOutElement`} from the stack.
+   * Pops the top {@link SlideOutElement `SlideOutElement`} from the stack if exists.
    * 
    * The top `SlideOutElement` will be dismissed with the `options` passed
    * in the {@link push `push`} method.
    */
   public pop(): void {
+    if (this._slideOutStack.length === 0) {
+      console.warn("Method 'pop' called but no slideout is presented.");
+      return;
+    }
+
     if (this._popping) return;
     this._popping = true;
 
