@@ -10,6 +10,7 @@ import {
 import { SlideOutElement } from "./slideout-element";
 import { SlideOutStackOptions } from "./slideout-stack-options";
 import { SlideOutStackParams } from "./slideout-stack-params";
+import { SlideOutStackResult } from "./slideout-stack-result";
 import {
   DEFAULT_ANIMATION_DURATION,
   DEFAULT_BACKDROP_DISMISS,
@@ -36,10 +37,11 @@ export class SlideOutStackController {
    */
   private _popping = false;
   /**
-   * The stack of slideouts with their options.
+   * The stack of slideouts.
    */
   private _slideOutStack: {
     component?: ComponentRef<any>,
+    result?: SlideOutStackResult,
     options: SlideOutStackOptions
   }[] = [];
   /**
@@ -104,10 +106,11 @@ export class SlideOutStackController {
   /**
    * Pops the top {@link SlideOutElement `SlideOutElement`} from the stack if exists.
    * 
-   * The top `SlideOutElement` will be dismissed with the `options` passed
+   * The top `SlideOutElement` will be dismissed according to the `options` passed
    * in the {@link push `push`} method.
+   * @param {SlideOutStackResult} result Result returned by the slideout when popped.
    */
-  public pop(): void {
+  public pop(result?: SlideOutStackResult): void {
     if (this._slideOutStack.length === 0) {
       console.warn("Method 'pop' called but no slideout is presented.");
       return;
@@ -115,6 +118,8 @@ export class SlideOutStackController {
 
     if (this._popping) return;
     this._popping = true;
+
+    this._slideOutStack[this._slideOutStack.length - 1].result = result;
 
     this._dismissTopBackdrop();
     this._dismissTopSlideOut();
@@ -152,7 +157,7 @@ export class SlideOutStackController {
 
     if (options.backdropDismiss) {
       backdrop.addEventListener("click", () => {
-        this.pop();
+        this.pop({ role: "backdrop" });
       });
     }
 
@@ -207,9 +212,10 @@ export class SlideOutStackController {
 
     const slideOut: SlideOutElement = {
       component: componentRef,
-      onDismissed: new Promise<void>((resolve) => {
+      onDismissed: new Promise<SlideOutStackResult>((resolve) => {
         componentRef.onDestroy(() => {
-          resolve();
+          const topSlideOut = this._slideOutStack[this._slideOutStack.length - 1];
+          resolve(topSlideOut.result ?? {});
         });
       })
     };

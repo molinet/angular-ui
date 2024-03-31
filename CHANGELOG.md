@@ -1,8 +1,16 @@
-<a name="1.0.0"></a>
+## 1.1.0 (2024-04-01)
 
-# 1.0.0 (2024-03-31)
+**slideout-stack**
 
-## slideout-stack
+| Commit | Type | Description |
+| -- | -- | -- |
+| [a50f4640][a50f4640] | feat | Added enhancement for passing data to the 'pop' method. |
+
+[a50f4640]:https://github.com/molinet/angular-ui/commit/a50f464028184b30f93fc8c20049207c0c02c9bb
+
+## 1.0.0 (2024-03-31)
+
+**slideout-stack**
 
 | Commit | Type | Description |
 | -- | -- | -- |

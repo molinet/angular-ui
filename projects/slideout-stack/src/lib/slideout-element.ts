@@ -1,5 +1,7 @@
 import { ComponentRef } from "@angular/core";
 
+import { SlideOutStackResult } from "./slideout-stack-result";
+
 /**
  * Represents a slideout element.
  * @author molinet
@@ -10,7 +12,7 @@ export interface SlideOutElement {
    */
   component: ComponentRef<any>;
   /**
-   * Returns a promise that resolves when the slideout dismisses.
+   * Promise resolved when the slideout dismisses. Contains the result of the slideout.
    */
-  onDismissed: Promise<void>;
+  onDismissed: Promise<SlideOutStackResult>;
 }
