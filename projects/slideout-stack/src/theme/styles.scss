@@ -1,3 +1,8 @@
+.backdrop,
+.slideout {
+  z-index: 99999;
+}
+
 .backdrop {
   position: absolute;
   top: 0;
