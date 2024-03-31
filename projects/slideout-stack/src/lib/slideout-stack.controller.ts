@@ -9,6 +9,7 @@ import {
 
 import { SlideOutElement } from "./slideout-element";
 import { SlideOutStackOptions } from "./slideout-stack-options";
+import { SlideOutStackParams } from "./slideout-stack-params";
 import {
   DEFAULT_ANIMATION_DURATION,
   DEFAULT_BACKDROP_DISMISS,
@@ -74,28 +75,29 @@ export class SlideOutStackController {
   /**
    * Pushes and displays a new {@link SlideOutElement `SlideOutElement`} to the stack.
    * 
-   * The `SlideOutElement` will be presented with the `options` passed.
+   * Custom data can be passed to the component with the `params.properties` parameter.
+   * 
+   * The `SlideOutElement` will be presented with the `params.options` passed.
    * If an option is not passed, the global option configured with the {@link config `config`} method will be used.
    * If no global option is configured, the default option will be used.
-   * @param {ComponentType<any>} component The component to be presented into the slideout.
-   * @param {SlideOutStackOptions} options The options for the slideout.
+   * @param {SlideOutStackParams} params The parameters for the slideout.
    * @returns {SlideOutElement} The `SlideOutElement` pushed to the stack.
    */
-  public push(component: ComponentType<any>, options?: SlideOutStackOptions): SlideOutElement {
+  public push(params: SlideOutStackParams): SlideOutElement {
     if (!this._domPortalOutlet) this._createDomPortalOutlet();
 
     this._slideOutStack.push({
       options: {
-        animationDuration: options?.animationDuration ?? this._globalOptions.animationDuration,
-        backdropDismiss: options?.backdropDismiss ?? this._globalOptions.backdropDismiss,
-        backdropOpacity: options?.backdropOpacity ?? this._globalOptions.backdropOpacity,
-        fromEdge: options?.fromEdge ?? this._globalOptions.fromEdge,
-        width: options?.width ?? this._globalOptions.width
+        animationDuration: params.options?.animationDuration ?? this._globalOptions.animationDuration,
+        backdropDismiss: params.options?.backdropDismiss ?? this._globalOptions.backdropDismiss,
+        backdropOpacity: params.options?.backdropOpacity ?? this._globalOptions.backdropOpacity,
+        fromEdge: params.options?.fromEdge ?? this._globalOptions.fromEdge,
+        width: params.options?.width ?? this._globalOptions.width
       }
     });
 
     this._presentBackdrop();
-    const slideOutElement = this._presentSlideOut(component);
+    const slideOutElement = this._presentSlideOut(params.component, params.properties);
     return slideOutElement;
   }
 
@@ -166,14 +168,23 @@ export class SlideOutStackController {
   }
 
   /**
-   * Creates, shows and returns a new `SlideOutElement`.
+   * Shows a new `SlideOutElement`.
    * @param {ComponentType<any>} component The component to be presented into the slideout.
    * @returns {SlideOutElement} The `SlideOutElement` element.
    */
-  private _presentSlideOut(component: ComponentType<any>): SlideOutElement {
+  private _presentSlideOut(
+    component: ComponentType<any>,
+    properties?: { [key: string]: any }
+  ): SlideOutElement {
     const portal = new ComponentPortal(component);
     const componentRef = this._domPortalOutlet!.attachComponentPortal(portal);
     componentRef.location.nativeElement.classList.add("slideout");
+
+    if (properties) {
+      Object.keys(properties).forEach((key: string) => {
+        componentRef.instance[key] = properties[key];
+      });
+    }
 
     const topSlideOut = this._slideOutStack[this._slideOutStack.length - 1];
     topSlideOut.component = componentRef;

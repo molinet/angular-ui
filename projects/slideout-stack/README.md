@@ -30,17 +30,17 @@ Add the styles in your `angular.json` file:
 ]
 ```
 
-## Usage
+### Injection
 
 Inject `SlideOutStackController` into your component or service:
 
 ```typescript
 import { SlideOutStackController } from "@molinet/slideout-stack";
 
-constructor(private slideOutStackController: SlideOutStackController) { }
+public constructor(private slideOutStackCtrl: SlideOutStackController) { }
 ```
 
-## API
+## API Reference
 
 ### Methods
 
@@ -48,53 +48,68 @@ constructor(private slideOutStackController: SlideOutStackController) { }
 
 Configures the global options for the slideouts. When a slideout is pushed without options, the global options will be used.
 
-- `options`: The default [`SlideOutStackOptions`](#slideoutstackoptions) for all the slideouts.
+| Parameter | Type | Description |
+| -- | -- | -- |
+| `options` | [`SlideOutStackOptions`](#slideoutstackoptions) | Default options for all the slideouts. |
 
-#### `push(component: ComponentType<any>, options?: SlideOutStackOptions): SlideOutElement`
+#### `push(params: SlideOutStackParams): SlideOutElement`
 
 Pushes and displays a new [`SlideOutElement`](#slideoutelement) to the stack.
 
-The [`SlideOutElement`](#slideoutelement) will be presented with the `options` passed.
+Custom data can be passed to the component with the `params.properties` parameter.
+
+The [`SlideOutElement`](#slideoutelement) will be presented with the `params.options` passed.
 
 If an option is not passed, the global option configured with the `config` method will be used.
 
 If no global option is configured, the default option will be used.
 
-- `component`: The component to be presented into the slideout.
-- `options` (optional): Options for the slideout.
+| Parameter | Type | Description |
+| -- | -- | -- |
+| `params` | [`SlideOutStackParams`](#slideoutstackparams) | The parameters for the slideout. |
 
 Returns a [`SlideOutElement`](#slideoutelement) representing the pushed slideout.
 
 #### `pop(): void`
 
-Pops the top [`SlideOutElement`](#slideoutelement) from the stack if exists. It will be dismissed with the `options` passed in the `push` method.
+Pops the top [`SlideOutElement`](#slideoutelement) from the stack if exists. It will be dismissed with the `params.options` passed in the `push` method.
 
 ### Interfaces
 
 #### `SlideOutStackOptions`
 
-Options for the slideout element.
+| Property | Type | Description |
+| -- | -- | -- |
+| `animationDuration` | number | (optional) Duration of the animation in milliseconds. Default is `400`. |
+| `backdropDismiss` | boolean | (optional) Indicates whether clicking on the backdrop should dismiss the slideout. Default is `false`. |
+| `backdropOpacity` | number | (optional) Opacity of the backdrop between `0` and `1`. Default is `0.3`. Note: backdrop color is black. |
+| `fromEdge` | type | (optional) The edge from which the slideout should appear. Possible values are `left` and `right`. Default is `right`. |
+| `width` | string | (optional) Width of the top slideout. Default is `80%` of the window total width. It can also be set in pixels (e.g. `250px`). |
 
-- `animationDuration` (optional): Duration of the animation in milliseconds. Default is `400`.
-- `backdropDismiss` (optional): Boolean indicating whether clicking on the backdrop should dismiss the slideout. Default is `false`.
-- `backdropOpacity` (optional): Opacity of the backdrop. Default is `0.3` (backdrop color is black).
-- `fromEdge` (optional): The edge from which the slideout should appear. Default is `right`.
-- `width` (optional): Width of the top slideout. Default is `80%` of the window total width. It can also be set in pixels.
+#### `SlideOutStackParams`
+
+| Property | Type | Description |
+| -- | -- | -- |
+| `component` | ComponentType\<any> | The component to be presented into the slideout. |
+| `properties` | { [key: string]: any } | (optional) Custom data to pass to the component. |
+| `options` | [`SlideOutStackOptions`](#slideoutstackoptions) | (optional) Options for the slideout. |
 
 #### `SlideOutElement`
 
-Represents a slideout element.
-
-- `component`: The component reference of the slideout.
-- `onDismissed`: Returns a promise that resolves when the slideout dismisses.
+| Property | Type | Description |
+| -- | -- | -- |
+| `component` | ComponentRef\<any> | The component reference of the slideout. |
+| `onDismissed` | Promise\<void> | Returns a promise that resolves when the slideout dismisses. |
 
 ## Example
+
+`app-example.component.ts`
 
 ```typescript
 import { ComponentType } from '@angular/cdk/portal';
 import { Component, OnInit } from '@angular/core';
-
 import { SlideOutStackController } from '@molinet/slideout-stack';
+import { MyComponent } from './my-component';
 
 @Component({
   selector: 'app-example',
@@ -105,7 +120,7 @@ import { SlideOutStackController } from '@molinet/slideout-stack';
 export class ExampleComponent implements OnInit {
 
   public constructor(
-    private slideOutStackController: SlideOutStackController
+    private slideOutStackCtrl: SlideOutStackController
   ) { }
 
   public ngOnInit(): void {
@@ -118,11 +133,17 @@ export class ExampleComponent implements OnInit {
 
   public pushSlideOut(): void {
     // Push a new slideout onto the stack
-    this.slideOutStackController.push(MyComponent, {
-      animationDuration: 500, // Will override the global option
-      backdropOpacity: 0.5,
-      fromEdge: 'right',
-      width: '70%'
+    this.slideOutStackCtrl.push({
+      component: MyComponent,
+      properties: {
+        data: 'Custom data'
+      },
+      options: {
+        animationDuration: 500, // Will override the global option
+        backdropOpacity: 0.5,
+        fromEdge: 'right',
+        width: '70%'
+      }
     }).onDismissed.then(() => {
       // Occurs when the component has been popped
       console.log('MyComponent dismissed');
@@ -131,7 +152,28 @@ export class ExampleComponent implements OnInit {
 
   popSlideOut() {
     // Pop the top slideout from the stack
-    this.slideOutStackController.pop();
+    this.slideOutStackCtrl.pop();
+  }
+}
+```
+
+`my-component.component.ts`
+
+```typescript
+import { Component, OnInit } from '@angular/core';
+
+@Component({
+  selector: 'my-component',
+  template: `
+    <p>My component works!</p>
+  `
+})
+export class MyComponent implements OnInit {
+
+  public data!: string;
+
+  public ngOnInit(): void {
+    console.log(this.data); // Outputs 'Custom data'
   }
 }
 ```
