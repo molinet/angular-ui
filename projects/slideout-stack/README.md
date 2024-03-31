@@ -4,7 +4,9 @@ A service that controls a stack of slideout elements.
 
 ## Overview
 
-The `SlideOutStackController` provides methods to manage a stack of slideout elements in an Angular application. slideout elements are components that can be presented and dismissed with animations.
+The `SlideOutStackController` provides methods to manage a stack of slideout elements in an Angular application. Slideout elements are components that can be presented and dismissed with animations.
+
+![slideout-stack-example](src/assets/examples/slideout-stack-example.gif)
 
 ## Installation
 
