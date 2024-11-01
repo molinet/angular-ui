@@ -1,11 +1,10 @@
 {
   "name": "@molinet/slideout-stack",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "peerDependencies": {
-    "@angular/cdk": "^17.3.2",
     "@angular/common": "^17.3.2",
     "@angular/core": "^17.3.2"
   },
