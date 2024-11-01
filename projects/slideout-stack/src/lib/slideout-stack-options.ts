@@ -1,4 +1,4 @@
-import { EdgeType } from "./edge-type";
+import { EdgeType } from './edge-type';
 
 /**
  * Options for the SlideOutStack.

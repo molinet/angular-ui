@@ -1,6 +1,6 @@
-import { ComponentRef } from "@angular/core";
+import { ComponentRef } from '@angular/core';
 
-import { SlideOutStackResult } from "./slideout-stack-result";
+import { SlideOutStackResult } from './slideout-stack-result';
 
 /**
  * Represents a slideout element.

@@ -1,6 +1,6 @@
-import { ComponentType } from "@angular/cdk/portal";
+import { ComponentType } from '@angular/cdk/portal';
 
-import { SlideOutStackOptions } from "./slideout-stack-options";
+import { SlideOutStackOptions } from './slideout-stack-options';
 
 /**
  * Parameters for a slideout to display in the stack.
