@@ -5,8 +5,9 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "peerDependencies": {
-    "@angular/common": "17.3.2",
-    "@angular/core": "17.3.2"
+    "@angular/cdk": "^17.3.2",
+    "@angular/common": "^17.3.2",
+    "@angular/core": "^17.3.2"
   },
   "dependencies": {
     "tslib": "2.6.2"
