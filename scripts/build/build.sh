@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/usr/bin/env bash
 
 # This script is intended to build all library
 # packages for production purposes.
@@ -10,6 +10,9 @@
 # Exit with nonzero exit code if anything fails
 set -e
 
+# Import config file
+source "scripts/config.sh"
+
 # Define build package function
 buildPackage() {
   packageName=${1}
@@ -18,24 +21,12 @@ buildPackage() {
   # Set temporary version in package.json
   gulp set-version --package="$packageName" --version="$version"
 
-  echo -e "\nBuilding package $packageName@$version for production..."
+  echo -e "\nBuilding package ${COLOR_INFO}$packageName@$version${COLOR_DEBUG} for production...\n"
   ng build "$packageName" --configuration production
 
   # Restore version in package.json
   gulp set-version --package="$packageName" --version=0.0.0
 }
-
-# Define library packages
-PACKAGES=(
-  "slideout-stack"
-)
-
-# Define valid pre-release tags
-TAGS=(
-  "alpha"
-  "beta"
-  "rc"
-)
 
 # Read arguments
 while getopts "v:t:i:" opt; do
@@ -44,15 +35,15 @@ while getopts "v:t:i:" opt; do
       if [[ "$OPTARG" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
         version="$OPTARG"
       else
-        echo -e "\033[0;31m(BUILD ERROR) Incorrect argument -v with value '$OPTARG'. Does not match the semantic version number 'X.Y.Z'.\n"
+        echo -e "${COLOR_ERROR}(ERROR) Incorrect argument -v with value '$OPTARG'. Does not match the semantic version number 'X.Y.Z'.\n"
         exit 0
       fi
     ;;
     t) # pre-release tag
-      if [[ "${TAGS[*]}" =~ $OPTARG ]]; then
+      if [[ "${PRERELEASE_TAGS[*]}" =~ $OPTARG ]]; then
         tag=$OPTARG
       else
-        echo -e "\033[0;31m(BUILD ERROR) Incorrect argument -t with value '$OPTARG'. Accepted values: 'alpha', 'beta' or 'rc'.\n"
+        echo -e "${COLOR_ERROR}(ERROR) Incorrect argument -t with value '$OPTARG'. Accepted values: 'alpha', 'beta' or 'rc'.\n"
         exit 0
       fi
     ;;
@@ -60,12 +51,12 @@ while getopts "v:t:i:" opt; do
       if [[ "$OPTARG" =~ ^[0-9]+$ ]]; then
         iteration="$OPTARG"
       else
-        echo -e "\033[0;31m(BUILD ERROR) Incorrect argument -i with value '$OPTARG'. Must be a number greater or equal than 0.\n"
+        echo -e "${COLOR_ERROR}(ERROR) Incorrect argument -i with value '$OPTARG'. Must be a number greater or equal than 0.\n"
         exit 0
       fi
     ;;
     \?)
-      echo -e "\033[0;31m(BUILD ERROR) Invalid argument.\n"
+      echo -e "${COLOR_ERROR}(ERROR) Invalid argument.\n"
       exit 0
     ;;
   esac
@@ -73,7 +64,7 @@ done
 
 # Check that required argument is defined
 if [ -z "$version" ]; then
-  echo -e "\033[0;31m(BUILD ERROR) Missing argument -v for version.\n"
+  echo -e "${COLOR_ERROR}(ERROR) Missing argument -v for version.\n"
   exit 0
 fi
 
@@ -81,21 +72,21 @@ fi
 if [ -n "$tag" ] && [ -n "$iteration" ]; then
   version=$version-$tag.$iteration
 elif [ -n "$tag" ] && [ -z "$iteration" ]; then
-  echo -e "\033[0;31m(BUILD ERROR) Pre-release tag defined but missing argument -i for iteration.\n"
+  echo -e "${COLOR_ERROR}(ERROR) Pre-release tag defined but missing argument -i for iteration.\n"
   exit 0
 elif [ -z "$tag" ] && [ -n "$iteration" ]; then
-  echo -e "\033[0;31m(BUILD ERROR) Iteration defined but missing argument -t for pre-release tag.\n"
+  echo -e "${COLOR_ERROR}(ERROR) Iteration defined but missing argument -t for pre-release tag.\n"
   exit 0
 fi
 
 # Delete dist directory
-echo -e "\nCleaning up dist directory..."
+echo -e "Cleaning up dist directory...\n"
 rm -rf dist
 
 # Build all packages
-for packageName in "${PACKAGES[@]}"; do
+for packageName in "${LIBRARY_PACKAGES[@]}"; do
   buildPackage "${packageName}" "$version"
 done
 
 # Build OK
-echo -e "\nAll packages builded successfully."
+echo -e "\n${COLOR_SUCCESS}All packages built successfully.${COLOR_DEBUG}"

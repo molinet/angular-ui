@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "watch": "bash scripts/build/watch.sh",
-    "build": "bash scripts/build/build.sh"
+    "build": "bash scripts/build/build.sh",
+    "publish": "bash scripts/publish/publish-all-packages.sh"
   },
   "dependencies": {
     "@angular/animations": "17.3.2",
