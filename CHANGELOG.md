@@ -1,3 +1,21 @@
+## 1.3.0 (2024-11-03)
+
+**chore**
+
+| Commit             | Type | Description                    |
+|--------------------|------|--------------------------------|
+| [1cdfed8][1cdfed8] | feat | Add build and publish scripts. |
+
+[1cdfed8]:https://github.com/molinet/angular-ui/commit/1cdfed8227b36c9b095f99c7836055cba840757a
+
+**slideout-stack**
+
+| Commit             | Type | Description                                                  |
+|--------------------|------|--------------------------------------------------------------|
+| [b1fc2c2][b1fc2c2] | feat | **(BREAKING)** Change angular compatibility to >=16.0.0 <19.0.0 |
+
+[b1fc2c2]:https://github.com/molinet/angular-ui/commit/b1fc2c2370fcdc3b4a2f7b6a4fd512a74725a41d
+
 ## 1.2.0 (2024-11-01)
 
 **slideout-stack**
