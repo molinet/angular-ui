@@ -1,5 +1,7 @@
 # Angular UI
 
+![Static Badge](https://img.shields.io/badge/https%3A%2F%2Fimg.shields.io%2Fbadge%2Fany_text-stable-73c549?style=flat&label=stability)
+
 A collection of components and directives for building Angular applications.
 
 ## Packages
