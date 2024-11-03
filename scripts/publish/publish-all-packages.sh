@@ -32,8 +32,16 @@ publishPackage() {
 
   if [ "$buildVersion" != "$remoteVersion" ]; then
     echo -e "\nPublishing ${COLOR_INFO}${packageName}@${buildVersion}${COLOR_DEBUG} package..."
-    npm publish "$buildDir"
-    echo "${COLOR_SUCCESS}Package ${packageName} published successfully.${COLOR_DEBUG}"
+
+    tag=$(echo "$buildVersion" | sed -E 's/^[^+-]+-([^-]+)\..*/\1/')
+
+    if [[ ! "${PRERELEASE_TAGS[*]}" =~ $tag ]]; then
+      tag="latest"
+    fi
+
+    npm publish "$buildDir" --tag "$tag"
+
+    echo -e "${COLOR_SUCCESS}Package ${packageName} published successfully.${COLOR_DEBUG}"
   else
     echo -e "${COLOR_WARNING}Ignoring package already published: ${packageName}@${buildVersion}${COLOR_DEBUG}"
   fi
