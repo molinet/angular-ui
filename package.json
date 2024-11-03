@@ -1,11 +1,11 @@
 {
   "name": "angular-ui",
-  "version": "1.2.0",
+  "version": "0.0.0",
   "private": true,
   "scripts": {
-    "watch": "ng build --watch --configuration development",
-    "build": "ng build --configuration production",
-    "test": "ng test"
+    "watch": "bash scripts/build/watch.sh",
+    "build": "bash scripts/build/build.sh",
+    "publish": "bash scripts/publish/publish-all-packages.sh"
   },
   "dependencies": {
     "@angular/animations": "17.3.2",
@@ -27,6 +27,8 @@
     "@angular/cli": "17.3.2",
     "@angular/compiler-cli": "17.3.2",
     "@types/jasmine": "5.1.4",
+    "gulp": "5.0.0",
+    "gulp-replace": "1.1.4",
     "jasmine-core": "5.1.2",
     "karma": "6.4.3",
     "karma-chrome-launcher": "3.2.0",
